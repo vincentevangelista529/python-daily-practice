@@ -1,4 +1,4 @@
-users = []
+import json
 
 def get_non_empty_input(prompt):
     value = input(prompt).strip()
@@ -23,14 +23,31 @@ def get_valid_age():
             continue
 
         return age
+
+
+def load_users():
+    try:
+        with open("users.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+
+def save_users():
+    with open("users.json", "w") as file:
+        json.dump(users, file, indent=4)
+
+
+users = load_users()
+
+
 def add_user():
     profile = {}
-
     profile["name"] = get_non_empty_input("Enter name: ")
     profile["age"] = get_valid_age()
-
     users.append(profile)
-    print("User added successfully!")
+    save_users()
+    print("User added and saved!")
 
 
 def show_users():
@@ -44,18 +61,18 @@ def show_users():
 
 
 while True:
-  print("\n1. Add User")
-  print("2. Show users")
-  print("3. Exit")
+    print("\n1. Add User")
+    print("2. Show Users")
+    print("3. Exit")
 
-  choice = input("Choose: ")
+    choice = input("Choose: ")
 
-  if choice == "1":
-    add_user()
-  elif choice == "2":
-    show_users()
-  elif choice == "3":
-    print("Goodbye!")
-    break
-  else:
-    print("Invalid Choice.")
+    if choice == "1":
+        add_user()
+    elif choice == "2":
+        show_users()
+    elif choice == "3":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")
